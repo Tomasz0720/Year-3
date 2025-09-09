@@ -1,0 +1,15 @@
+Lab 01 Reflection
+
+1. Did the code work immediately? If not, how did you fix it?
+
+Yes. The code did work immediately. The sample program that was automatically made when I created the Flutter project already had a button that, when pressed, incremented a counter in the middle of the screen; the only thing missing was the snackbar that was supposed to appear at the bottom of the screen when the button is pressed. Given that the snackbar was the only thing missing, I simply asked ChatGPT how to add a snackbar to the bottom of a screen in a Flutter project. The LLM provided a template to follow on how to add a snackbar, and I simply added that code to the existing app code.
+
+
+2. Would you use AI for future coding help? Why or why not?
+
+Yes. I would use AI for future coding help. I already use AI to assist with personal coding tasks or side projects, and for the most part, it works. But I use AI as a helper, not for “Vibe coding”. I have tried “vibe coding” (blindly asking AI to help you write code), and sometimes it works, but sometimes it doesn’t, and I find when I write code myself I’m able to understand it better in case there's any bugs or anything, because one thing I learned about “vibe coding” is that LLMs aren't always the best at following strict instructions and fixing their own bugs. So yes, I would use ChatGPT- or any LLM to help me code- but I wouldn’t rely on it.
+
+
+3. What are some risks or limitations of using AI in programming?
+
+As previously mentioned, one of the limitations of using AI in programming is that they (occasionally) tend to provide code that has errors, and they aren’t always the best (in my experience) at fixing their own errors. I also find that AI often doesn’t share the same “vision” as the programmer, which makes programming things like GUI elements super annoying- to the point that it's faster to just learn the program yourself and code it how you (the developer) want it. Obviously, a risk to using AI for programming is things like the risk of the AI replacing the developer altogether (probably won’t happen anytime soon). Another risk is using AI to write code that you (the developer) might not understand, and pushing code that might have weak points to production, which could open up your system to exploits and other gaps that hackers and bad actors could exploit.
