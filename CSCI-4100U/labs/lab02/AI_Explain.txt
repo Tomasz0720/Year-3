@@ -1,0 +1,13 @@
+What problem you asked AI about.
+
+- I was trying to do the part of the lab where you loop through the list of sorted numbers and add them together using a while loop. My syntax was wrong, and I wasn't sure why, so I uploaded a code snippet and asked if I could use while loops in dart in the way that I did (while(var i = 0; i < nums.length)...). I was using syntax of a for loop like in other programming languages (silly mistake, flew right over my head).
+
+
+How the AI helped you debug or test your code.
+
+- It informed me that you couldn't declare a variable inside the while condition.
+
+
+A screenshot (or copy-paste) of part of your AI discussion.
+
+- Attached in my .zip file.
