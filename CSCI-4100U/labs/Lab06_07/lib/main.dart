@@ -1,10 +1,27 @@
+// Pages (UI structure)
+// The app must contain two pages:
+// Page A (Add Tasks): Includes a Form for user's input: Title, Description, Priority of the task. (PARTIALLY COMPLETE)
+// Page B (Todo List): Displays all tasks (completed and not completed) using a list with: (PARTIALLY COMPLETE)
+// A Checkbox to toggle completion status. (INCOMPLETE)
+// A Delete control to remove todo items. (PARITALLY COMPLETE)
+
+// Navigation
+// Include an App Drawer with two menu items to navigate between the pages. (INCOMPLETE)
+// Tapping each drawer item must open the correct page. (INCOMPLETE but i do have a + button...)
+
+// Database (Storage requirement) (COMPLETE- structure is there)
+// Store all todo data (title, description, priority, completion status) in a database.
+// The user should be able to add new tasks, update existing tasks (task completion), and delete tasks.
+
 import 'package:flutter/material.dart';
 import 'grade.dart';
 import 'grades_model.dart';
 import 'package:file_picker/file_picker.dart';
 import 'dart:io';
-import 'dart:io';
 import 'dart:typed_data';
+import 'package:sqflite/sqflite.dart';
+import 'package:path/path.dart';
+import 'grade.dart';
 
 void main() {
   runApp(const MyApp());
@@ -29,7 +46,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Grades App',
+      title: 'To Do App',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueGrey),
         useMaterial3: true,
@@ -58,150 +75,9 @@ class ListGrades extends StatefulWidget {
 
 class _ListGradesState extends State<ListGrades> {
   final GradesModel _gradesModel = GradesModel();
-  List<Grade> grades = [];
+  List<Grade> titles = [];
   int? _selectedIndex;
-  String _sortBy = 'sid_asc';
 
-  void _exportCSV() async {
-    try {
-      String csv = 'sid,grade\n';
-      for (var grade in grades) {
-        csv += '${grade.sid},${grade.grade}\n';
-      }
-
-      String? outputPath = await FilePicker.platform.saveFile(
-        dialogTitle: 'Save CSV File',
-        fileName: 'grades_export.csv',
-        bytes: Uint8List.fromList(csv.codeUnits),
-      );
-
-      if (outputPath != null) {
-        print('Exported ${grades.length} grades to CSV');
-
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Exported ${grades.length} grades successfully!')),
-        );
-      }
-    } catch (e) {
-      print('Error exporting CSV: $e');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error exporting CSV: $e')),
-      );
-    }
-  }
-
-  void _importCSV() async{
-    try{
-      FilePickerResult? result = await FilePicker.platform.pickFiles(
-        type: FileType.custom,
-        allowedExtensions: ['csv'],
-      );
-
-      if(result != null){
-        File file = File(result.files.single.path!);
-        String contents = await file.readAsString();
-        List<String> lines = contents.split('\n');
-        int imported = 0;
-
-        for(int i = 1; i < lines.length; i++){
-          String line = lines[i].trim();
-          if(line.isEmpty) continue;
-
-          List<String> parts = line.split(',');
-          if(parts.length >= 2){
-            String sid = parts[0].trim();
-            String grade = parts[1].trim();
-
-            Grade newGrade = Grade(sid: sid, grade: grade);
-            await _gradesModel.insertGrade(newGrade);
-            imported++;
-          }
-        }
-
-        _loadGrades();
-        print('$imported grades imported from CSV');
-
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('$imported grades imported from CSV')),
-        );
-      }
-    } catch (e){
-      print('Error importing CSV: $e');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error importing CSV: $e')),
-      );
-    }
-  }
-
-  void _sortGrades(){
-    setState((){
-      if(_sortBy == 'sid_asc'){
-        grades.sort((a, b) => a.sid.compareTo(b.sid));
-      } else if(_sortBy == 'sid_desc'){
-        grades.sort((a, b) => b.sid.compareTo(a.sid));
-      } else if(_sortBy == 'grade_asc'){
-        grades.sort((a, b) => a.grade.compareTo(b.grade));
-      } else if(_sortBy == 'grade_desc'){
-        grades.sort((a, b) => b.grade.compareTo(a.grade));
-      }
-    });
-  }
-
-  void _showSortMenu(BuildContext context) async {
-    final result = await showMenu(
-      context: context,
-      position: RelativeRect.fromLTRB(1000, 80, 0, 0),
-      items: [
-        PopupMenuItem(
-          value: 'sid_asc',
-          child: Row(
-            children: [
-              Icon(_sortBy == 'sid_asc' ? Icons.check : Icons.arrow_upward),
-              SizedBox(width: 8),
-              Text('Student ID (Ascending)'),
-            ],
-          ),
-        ),
-        PopupMenuItem(
-          value: 'sid_desc',
-          child: Row(
-            children: [
-              Icon(_sortBy == 'sid_desc' ? Icons.check : Icons.arrow_downward),
-              SizedBox(width: 8),
-              Text('Student ID (Descending)'),
-            ],
-          ),
-        ),
-        PopupMenuItem(
-          value: 'grade_asc',
-          child: Row(
-            children: [
-              Icon(_sortBy == 'grade_asc' ? Icons.check : Icons.arrow_upward),
-              SizedBox(width: 8),
-              Text('Grade (Ascending)'),
-            ],
-          ),
-        ),
-        PopupMenuItem(
-          value: 'grade_desc',
-          child: Row(
-            children: [
-              Icon(_sortBy == 'grade_desc' ? Icons.check : Icons.arrow_downward),
-              SizedBox(width: 8),
-              Text('Grade (Descending)'),
-            ],
-          ),
-        ),
-      ],
-    );
-
-    if (result != null) {
-      setState(() {
-        _sortBy = result;
-      });
-      _sortGrades();
-    }
-  }
 
   void _showEditMenu(BuildContext context, int index) async{
     final result = await showMenu(
@@ -214,29 +90,18 @@ class _ListGradesState extends State<ListGrades> {
             children: [
               Icon(Icons.edit),
               SizedBox(width: 8),
-              Text('Edit Grade'),
+              Text('Edit Task'),
             ],
           ),
         ),
       ],
     );
 
-    if (result == 'edit') {
-      Grade selectedGrade = grades[index];
-
-      final Grade? editResult = await Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => GradeForm(grade: selectedGrade),
-        ),
-      );
-
-      if (editResult != null) {
-        await _gradesModel.updateGrade(editResult);
-        _loadGrades();
-        print('Grade updated: ${editResult.sid} - ${editResult.grade}');
-      }
-    }
+  Future<void> _loadGrades() async {
+    List<Grade> loadedGrades = await _gradesModel.getAllGrades();
+    setState(() {
+      titles = loadedGrades;
+    });
   }
 
   @override
@@ -245,13 +110,7 @@ class _ListGradesState extends State<ListGrades> {
     _loadGrades();  // ← Load grades when page opens
   }
 
-  Future<void> _loadGrades() async {
-    List<Grade> loadedGrades = await _gradesModel.getAllGrades();
-    setState(() {
-      grades = loadedGrades;
-    });
-    _sortGrades();
-  }
+
 
   void _addGrade() async {
     print('Add grade button pressed');
@@ -264,7 +123,6 @@ class _ListGradesState extends State<ListGrades> {
     if (result != null) {
       await _gradesModel.insertGrade(result);
       _loadGrades();
-      print('Grade added: ${result.sid} - ${result.grade}');
     }
   }
 
@@ -275,19 +133,18 @@ class _ListGradesState extends State<ListGrades> {
     }
 
     print('Edit grade button pressed');
-    Grade selectedGrade = grades[_selectedIndex!];
+    Grade selectedTitle = titles[_selectedIndex!];
 
     final Grade? result = await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => GradeForm(grade: selectedGrade),
+        builder: (context) => GradeForm(grade: selectedTitle),
       ),
     );
 
     if (result != null) {
       await _gradesModel.updateGrade(result);
       _loadGrades();
-      print('Grade updated: ${result.sid} - ${result.grade}');
     }
   }
 
@@ -298,7 +155,7 @@ class _ListGradesState extends State<ListGrades> {
     }
 
     print('Delete grade button pressed');
-    Grade selectedGrade = grades[_selectedIndex!];
+    Grade selectedGrade = titles[_selectedIndex!];
 
     await _gradesModel.deleteGrade(selectedGrade.id!);
 
@@ -307,14 +164,14 @@ class _ListGradesState extends State<ListGrades> {
     });
     _loadGrades();
 
-    print('Grade deleted: ${selectedGrade.sid}');
+    print('Task deleted: ${selectedGrade.title}');
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Grades'),
+        title: const Text('Tasks'),
         actions: [
           IconButton(
             icon: Icon(
@@ -325,39 +182,15 @@ class _ListGradesState extends State<ListGrades> {
             onPressed: widget.onToggleTheme,
             tooltip: 'Toggle Theme',
           ),
-          IconButton(
-              icon: const Icon(Icons.sort),
-              onPressed: () => _showSortMenu(context),
-          ),
-          IconButton(
-            icon: const Icon(Icons.bar_chart),
-            onPressed: (){
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => GradeChartPage(grades: grades),
-                ),
-              );
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.upload_file),
-            onPressed: _importCSV,
-          ),
-          IconButton(
-            icon: const Icon(Icons.download),
-            onPressed: _exportCSV,
-            tooltip: 'Export CSV',
-          ),
         ],
       ),
 
       body: ListView.builder(
-        itemCount: grades.length,
+        itemCount: titles.length,
 
         itemBuilder: (context, index) {
           return Dismissible(
-            key: Key(grades[index].id.toString()),
+            key: Key(titles[index].id.toString()),
             direction: DismissDirection.endToStart,
             background: Container(
               color: Colors.red,
@@ -366,10 +199,10 @@ class _ListGradesState extends State<ListGrades> {
               child: const Icon(Icons.delete, color: Colors.white),
             ),
             onDismissed: (direction) async{
-              Grade deletedGrade = grades[index];
+              Grade deletedGrade = titles[index];
               await _gradesModel.deleteGrade(deletedGrade.id!);
               _loadGrades();
-              print('Grade deleted via swipe: ${deletedGrade.sid}');
+              print('Task deleted via swipe: ${deletedGrade.title}');
             },
             child: GestureDetector(
               onTap: () {
@@ -386,8 +219,8 @@ class _ListGradesState extends State<ListGrades> {
                   color: _selectedIndex == index ? Colors.blueGrey[100] : null,
                 ),
                 child: ListTile(
-                  title: Text(grades[index].sid),
-                  subtitle: Text('Grade: ${grades[index].grade}'),
+                  title: Text(titles[index].title),
+                  subtitle: Text('Description: ${titles[index].description} n\ Priority: ${titles[index].priority}'),
                 ),
               ),
             ),
@@ -404,47 +237,52 @@ class _ListGradesState extends State<ListGrades> {
 
 
 class GradeForm extends StatefulWidget {
-  final Grade? grade;
+  final Grade? title;
 
-  const GradeForm({super.key, this.grade});
+  const GradeForm({super.key, this.title});
 
   @override
   State<GradeForm> createState() => _GradeFormState();
 }
 
 class _GradeFormState extends State<GradeForm> {
-  final TextEditingController _sidController = TextEditingController();
-  final TextEditingController _gradeController = TextEditingController();
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _descController = TextEditingController();
+  final TextEditingController _priorityController = TextEditingController();
 
   @override
   void initState(){
     super.initState();
-    if(widget.grade != null) {
-      _sidController.text = widget.grade!.sid;
-      _gradeController.text = widget.grade!.grade;
+    if(widget.title != null) {
+      _titleController.text = widget.title!.title;
+      _descController.text = widget.title!.description;
+      _priorityController.text = widget.title!.priority;
     }
   }
 
   @override
   void dispose(){
-    _sidController.dispose();
-    _gradeController.dispose();
+    _titleController.dispose();
+    _descController.dispose();
+    _priorityController.dispose();
     super.dispose();
   }
 
   void _saveGrade() {
-    String sid = _sidController.text;
-    String gradeValue = _gradeController.text;
+    String title = _titleController.text;
+    String descValue = _titleController.text;
+    String priorityValue = _priorityController.text;
 
-    if (sid.isEmpty || gradeValue.isEmpty) {
+    if (title.isEmpty || descValue.isEmpty) {
       print('Please fill in all fields');
       return;
     }
 
     Grade grade = Grade(
-      id: widget.grade?.id,
-      sid: sid,
-      grade: gradeValue,
+      id: widget.title?.id,
+      title: title,
+      description: descValue,
+      priority: priorityValue,
     );
 
     Navigator.pop(context, grade);
@@ -454,25 +292,33 @@ class _GradeFormState extends State<GradeForm> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.grade == null ? 'Add Grade' : 'Edit Grade'),
+        title: Text(widget.title == null ? 'Add Task' : 'Edit Grade'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
             TextField(
-              controller: _sidController,
+              controller: _titleController,
               decoration: const InputDecoration(
-                labelText: 'Student ID',
+                labelText: 'Title',
                 border: OutlineInputBorder(),
               ),
             ),
             const SizedBox(height: 16),
             TextField(
-              controller: _gradeController,
+              controller: _descController,
               decoration: const InputDecoration(
-                labelText: 'Grade',
+                labelText: 'Description',
                 border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 16),
+              TextField(
+              controller: _priorityController,
+              decoration: const InputDecoration(
+              labelText: 'Priority',
+              border: OutlineInputBorder(),
               ),
             ),
           ],
@@ -486,73 +332,100 @@ class _GradeFormState extends State<GradeForm> {
   }
 }
 
-class GradeChartPage extends StatelessWidget{
-  final List<Grade> grades;
-  const GradeChartPage({super.key, required this.grades});
 
-  @override
-  Widget build(BuildContext context){
-    Map<String, int> gradeFrequency = {};
-    for(var grade in grades){
-      gradeFrequency[grade.grade] = (gradeFrequency[grade.grade] ?? 0) + 1;
+
+class Grade {
+  int? id;
+  String title;
+  String description;
+  String priority;
+
+  Grade({
+    this.id,
+    required this.title,
+    required this.description,
+    required this.priority,
+  });
+
+  Map<String, dynamic> toMap(){
+  return{
+  'id': id,
+  'title': title,
+  'description': description,
+  'priority': priority,
+  };
+}
+
+    factory Grade.fromMap(Map<String, dynamic> map){
+      return Grade(
+      id: map['id'],
+      title: map['title'],
+      description: map['description'],
+      priority: map['priority'],
+    );
+  }
+}
+
+
+
+class GradesModel {
+  static Database? _database;
+
+  Future<Database> get database async {
+      if (_database != null) return _database!;
+      _database = await _initDatabase();
+      return _database!;
     }
 
-    List<String> sortedGrades = gradeFrequency.keys.toList()..sort();
-    int maxFrequency = gradeFrequency.values.isEmpty ? 1 : gradeFrequency.values.reduce((a, b) => a > b ? a : b);
+    Future<List<Grade>> getAllGrades() async {
+      final db = await database;
+      final List<Map<String, dynamic>> maps = await db.query('grades');
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Grade Distribution Chart'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            const Text(
-              'Grade Frequency Chart',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 20),
-            Expanded(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: sortedGrades.map((grade) {
-                  int frequency = gradeFrequency[grade]!;
-                  double barHeight = (frequency / maxFrequency) * 200;
+      return List.generate(maps.length, (i) {
+        return Grade.fromMap(maps[i]);
+      });
+    }
 
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Text(
-                        '$frequency',
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(height: 4),
-                      Container(
-                        width: 40,
-                        height: barHeight,
-                        decoration: BoxDecoration(
-                          color: Colors.blueGrey,
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        grade,
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  );
-                }).toList(),
-              ),
-            ),
-            const SizedBox(height: 20),
-            const Text('X-axis: Grade'),
-            const Text('Y-axis: Frequency'),
-          ],
-        ),
-      ),
+    Future<int> insertGrade(Grade grade) async {
+      final db = await database;
+      return await db.insert('grades', grade.toMap());
+    }
+
+    Future<int> updateGrade(Grade grade) async {
+      final db = await database;
+        return await db.update(
+        'grades',
+        grade.toMap(),
+        where: 'id = ?',
+        whereArgs: [grade.id],
+      );
+    }
+
+    Future<int> deleteGrade(int id) async {
+      final db = await database;
+      return await db.delete(
+      'grades',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+
+  Future<Database> _initDatabase() async {
+      String path = join(await getDatabasesPath(), 'grades.db');
+
+      return await openDatabase(
+      path,
+      version: 1,
+      onCreate: (db, version) async {
+      await db.execute('''
+              CREATE TABLE grades(
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                title TEXT NOT NULL,
+                description TEXT NOT NULL
+                priority TEXT NOT NULL
+              )
+            ''');
+      },
     );
   }
 }

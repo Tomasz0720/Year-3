@@ -54,8 +54,9 @@ class GradesModel {
         await db.execute('''
           CREATE TABLE grades(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            sid TEXT NOT NULL,
-            grade TEXT NOT NULL
+            title TEXT NOT NULL,
+            description TEXT NOT NULL
+            priority TEXT NOT NULL
           )
         ''');
       },
