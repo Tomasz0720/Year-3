@@ -1,0 +1,62 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ready-to-use page template</title>
+    <style>
+        .grid-container {
+            display: grid;
+            /* grid-template-columns: auto auto auto auto auto auto; */
+            gap: 10px;
+            background-color: chocolate;
+            padding: 10px;
+        }
+
+        .grid-container * {
+            background-color: rgba(255 255 255 / 0.8);
+            text-align: center;
+            padding: 10px 5px;
+            font-size: 20px;
+        }
+
+        .main-header,
+        .main-footer {
+            grid-column: 1 / span 8;
+        }
+
+        .side1 {
+            grid-column: 1 / 3;
+            grid-row: 2;
+        }
+
+        .content {
+            background-color: rgba(200 200 225 / 0.8);
+            grid-column: col-start 2 / span 4;
+            grid-row: 2;
+        }
+
+        .side2 {
+            grid-column: col-start 6 / span 2;
+            grid-row: 2;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Content sectioning with CSS</h1>
+
+
+    <div class="grid-container">
+        <header class="main-header">I am the header</header>
+        <aside class="side1">I am sidebar 1</aside>
+        <article class="content">I am the main article. Put as much text in
+            here as you would like.
+        </article>
+        <aside class="side2">I am sidebar 2</aside>
+        <footer class="main-footer">I am the footer</footer>
+    </div>
+
+</body>
+
+</html>

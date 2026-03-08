@@ -1,0 +1,44 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grid justification</title>
+    <style>
+        .grid-container {
+            display: grid;
+            justify-content: space-evenly; /* space-evenly center, space-around */
+            /* Grid must be the container justify to have an effect */
+            grid-template-columns: 50px 50px 50px;
+            gap: 5px;
+            background-color:darkgreen;
+            padding: 20px;
+            
+            /* Vertical justification */
+            /* height: 300px;
+            align-content: space-around; */
+        }
+
+        .grid-container > div {
+            background-color: rgba(255 255 255 / 0.8);
+            text-align: center;
+            padding: 20px 0;
+            font-size: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Grid justification</h1>
+
+    <div class="grid-container">
+        <div>1</div>
+        <div>2</div>
+        <div>3</div>
+        <div>4</div>
+        <div>5</div>
+        <div>6</div>
+    </div>
+</body>
+
+</html>

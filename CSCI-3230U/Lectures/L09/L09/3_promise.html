@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+
+    <h2>An example of a JavaScript Promise</h2>
+
+    <p id="displayResult"></p>
+
+    <script>
+        function updateText(new_text) {
+            document.getElementById("displayResult").innerHTML = new_text;
+        }
+
+        // "Producing code" - may take time to complete
+        let myPromise = new Promise(function (resolve, reject) {
+            let x = 0;
+
+            // Try changing x to a value other than 0
+
+            if (x == 0) {
+                // Promise 'fulfilled' - when Successful
+                resolve("Promise fulfilled");
+            } else {
+                // Promise 'rejected' - when Unsuccessful
+                reject("Error");
+            }
+        });
+
+        // "Consuming code" - Waits for the fulfilled Promise
+        myPromise.then(
+            // Code if successful
+            function (value) { updateText(value); },
+            // Code if unsuccessful
+            function (error) { updateText(error); }
+        );
+    </script>
+
+</body>
+
+</html>

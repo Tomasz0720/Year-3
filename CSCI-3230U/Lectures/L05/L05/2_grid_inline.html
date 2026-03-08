@@ -1,0 +1,52 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grid vs inline-grid</title>
+    <style>
+        .container {
+            display: grid;
+            background-color: darkseagreen;
+            grid-template-columns: auto auto;
+            width: 60px;
+            height: 60px;
+        }
+
+        .container div {
+            border: 1px solid white;
+        }
+
+        .container.is-inline-grid {
+            display: inline-grid;
+        }
+    </style>
+</head>
+
+<body>
+    <h3>An <em>inline-grid</em></h3>
+    <span>The grid is inline with
+        <div class="container is-inline-grid">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+        this sentence.
+    </span>
+
+    <h3>A regular <em>grid</em></h3>
+
+    <span>The grid is <strong>not</strong> inline with
+        <div class="container">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+        this sentence.
+    </span>
+</body>
+
+</html>

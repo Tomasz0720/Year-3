@@ -1,0 +1,107 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+        integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js" 
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" 
+        crossorigin="anonymous"></script>
+
+    <title>Adding a hero banner</title>
+    <script>
+        $(document).ready(function () {
+
+            // Check for click events on the navbar burger icon
+            $(".navbar-burger").click(function () {
+
+                // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
+                $(".navbar-burger").toggleClass("is-active");
+                $(".navbar-menu").toggleClass("is-active");
+
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <!-- navbar colours: https://bulma.io/documentation/components/navbar/#colors -->
+    
+    <!-- Info coloured navbar -->
+    <!-- <nav class="navbar is-info" role="navigation" aria-label="main navigation"> -->
+
+    <!-- Default colour -->
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+
+
+        <!-- navbar-brand -->
+        <div class="navbar-brand">
+            <a class="navbar-item" href="#">
+                <img src="images/logo.png" width="60" height="70" alt="Bug Pharma Logo" />
+            </a>
+
+            <!-- Burger item -->
+            <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false"
+                data-target="navbarBasicExample">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+
+        <!-- navbar-menu -->
+        <div id="navbarBasicExample" class="navbar-menu">
+            <!-- nav-Start -->
+            <div class="navbar-start">
+                <!-- Item 1: Home -->
+                <a class="navbar-item" href="#">Home</a>
+
+                <!-- Item 2: Dropdown menu -->
+                <div class="navbar-item has-dropdown is-hoverable">
+                    <a class="navbar-link">Products</a>
+                    <div class="navbar-dropdown">
+                        <a class="navbar-item" href="#">Rad Grow</a>
+                        <a class="navbar-item" href="#">Fire Breath</a>
+                        <hr class="navbar-divider" />
+                        <a class="navbar-item" href="#">Armour Plating</a>
+                        <a class="navbar-item" href="#">Chobham Armour</a>
+                        <a class="navbar-item" href="#">Ceraminc composite</a>
+                    </div>
+                </div>
+
+                <!-- Item 3: Contact -->
+                <a class="navbar-item" href="#">Contact Us</a>
+            </div>
+
+            <!-- nav-End -->
+            <div class="navbar-end">
+                <div class="navbar-item">
+                    <div class="buttons">
+                        <a class="button is-danger">Sign-Up</a>
+                        <a class="button is-light">Log in</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero banner -->
+    <section class="hero is-primary">
+        <div class="hero-body">
+            <p class="title">
+                Bug Pharma has a treatment for you
+            </p>
+            <p class="subtitle">
+                Soylent green now available
+            </p>
+        </div>
+    </section>
+
+</body>
+
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Article Grid Example</title>
+    <style>
+        /* Basic reset for demo */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        .grid-container {
+            display: grid;
+            /* Adjust the columns and gaps to your preference */
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            padding: 1rem;
+            background-color: #fafafa;
+            border: 1px solid #ddd;
+            max-width: 800px;
+            margin: 2rem auto;
+        }
+
+        .grid-item {
+            background-color: #eaeaea;
+            padding: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .grid-item h3 {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Optional styling for the article heading */
+        header h2 {
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+    <article class="grid-container">
+        <!-- You can also place <header> here if you'd like -->
+        <header style="grid-column: 1 / -1;">
+            <h2>My Article Title</h2>
+        </header>
+
+        <div class="grid-item">
+            <h3>Section 1</h3>
+            <p>
+                This is the first section of the article. You can place any
+                self-contained content here, like paragraphs, images, etc.
+            </p>
+        </div>
+
+        <div class="grid-item">
+            <h3>Section 2</h3>
+            <p>
+                This is the second section, which is laid out side-by-side
+                with Section 1 on larger screens.
+            </p>
+        </div>
+
+        <div class="grid-item">
+            <h3>Section 3</h3>
+            <p>
+                As you add more content, it will automatically flow into new
+                rows based on the grid setup above.
+            </p>
+        </div>
+
+        <div class="grid-item">
+            <h3>Section 4</h3>
+            <p>
+                Each grid item can contain headings, images, videos, lists,
+                or anything else you’d normally include in article content.
+            </p>
+        </div>
+    </article>
+
+</body>
+
+</html>

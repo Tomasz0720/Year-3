@@ -1,0 +1,55 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grid lines</title>
+    <style>
+        .grid-container {
+            display: grid;
+            grid-template-columns: auto auto auto;
+            gap: 10px;
+            background-color: darkolivegreen;
+            padding: 10px;
+        }
+
+        /* Apply style to all divs that are *children> of grid container */
+        .grid-container > div {
+            /* White at 80% alpha */
+            background-color: rgba(255 255 255 / 0.8);
+            text-align: center;
+            padding: 20px;
+            font-size: 30px;
+        }
+
+        /* Specify column start-end. Inherits colouring from above */
+        .item1 {
+            grid-row-start: 1;
+            grid-row-end: 4;
+        }
+
+        /* Column item */
+        /* .item1 {
+            grid-column-start: 1;
+            grid-column-end: 3;
+        } */
+    </style>
+</head>
+
+<body>
+    <h1>Grid Lines</h1>
+
+    <div class="grid-container">
+        <div class="item1">1</div>
+        <div>2</div>
+        <div>3</div>
+        <div>4</div>
+        <div>5</div>
+        <div>6</div>
+        <div>7</div>
+        <div>8</div>
+    </div>
+</body>
+
+</html>
