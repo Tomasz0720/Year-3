@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="src/4_app.js" defer></script>
+    <title>4 - Vue events</title>
+</head>
+
+<body>
+    <h2>My first Vue app</h2>
+
+    <div id="app">
+        <p>Our next GPU is a: {{ model }}, costing {{ price }}, with {{ cores }} CUDA cores.</p>
+
+        <!-- Event directive: v-on:type_of_event="javascript to execute on click" -->
+        <!-- We can modify counter here in template or inside the component (js) -->
+        <!-- Since it's JS, and not DOM manipulation, we just reference this property -->
+        <button v-on:click="cores++">Increase core count</button>
+        <br><br>
+        <!-- Shorthand syntax -->
+        <button @click="cores--">Decrease core count</button>
+        <br><br>
+        <div @click="changeModel('RTX 3070', '$499', 5888)">Budget friendly option?</div>
+    </div>
+</body>
+
+</html>

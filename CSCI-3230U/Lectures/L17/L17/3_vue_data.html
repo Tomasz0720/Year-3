@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="src/3_app.js" defer></script>
+    <title>3 - Vue data</title>
+</head>
+
+<body>
+    <h2>My first Vue app</h2>
+
+    <div id="app">
+        <!-- innerHTML automatically used here as the app template -->
+        <p>Our next GPU is a: {{ model }}, costing {{ price }}, with {{ cores }} CUDA cores.</p>
+    </div>
+
+    <!-- Not in our template, and so no interpolation by our app is performed. -->
+    {{ model }}
+</body>
+
+</html>

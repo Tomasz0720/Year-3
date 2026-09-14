@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="src/6_app.js" defer></script>
+    <title>6 - Mouse events</title>
+    <style>
+        .box {
+            padding: 100px 0;
+            width: 300px;
+            text-align: center;
+            background: #ddd;
+            margin: 20px;
+            display: inline-block;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>My first Vue app</h2>
+
+    <div id="app">
+        <div v-if="showCard">
+            <p>Our next GPU is a: {{ model }}, costing {{ price }}, with {{ cores }} CUDA cores.</p>
+        </div>
+        <!-- Notice how the button contents update -->
+        <button @click="toggleCard">
+            <span v-if="showCard">Hide card</span>
+            <span v-else>Show card</span>
+            <!-- <span v-if="!showCard">Show card</span> -->
+        </button>
+
+        <!-- v-show uses CSS to hide the element with display: none, whereas v-if removes from DOM -->
+        <!-- Inspect element with JS console. This one remains, but div-books above disappears -->
+        <!-- Adding & removing from DOM is a heavier operation, so use show -->
+        <div v-show="showCard">Currently showing card</div>
+
+        <!-- Event handler for mouse -->
+        <!-- We can pass custom arguments, but they overwrite the event object e -->
+        <!-- To retain it, we use $event, param -->
+        <div class="box" @mouseover="handleEvent($event, 5)">mouseover (enter)</div>
+        <div class="box" @mouseleave="handleEvent">mouseleave</div>
+        <div class="box" @dblclick="handleEvent">double click</div>
+        <div class="box" @mousemove="handleMousemove">[{{ x }}, {{ y }}]</div>
+    </div>
+</body>
+
+</html>

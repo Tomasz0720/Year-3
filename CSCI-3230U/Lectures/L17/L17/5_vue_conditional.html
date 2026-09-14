@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="src/5_app.js" defer></script>
+    <title>5 - Vue conditional rendering</title>
+</head>
+
+<body>
+    <h2>My first Vue app</h2>
+
+    <div id="app">
+        <div v-if="showCard">
+            <p>Our next GPU is a: {{ model }}, costing {{ price }}, with {{ cores }} CUDA cores.</p>
+        </div>
+        <!-- Notice how the button contents update -->
+        <button @click="toggleCard">
+            <span v-if="showCard">Hide card</span>
+            <span v-else>Show card</span>
+            <!-- <span v-if="!showCard">Show card</span> -->
+        </button>
+
+        <!-- v-show uses CSS to hide the element with display: none, whereas v-if removes from DOM -->
+        <!-- Inspect element with JS console. This one remains, but div-books above disappears -->
+        <!-- Adding & removing from DOM is a heavier operation, so use show -->
+        <div v-show="showCard">Currently showing card</div>
+    </div>
+</body>
+
+</html>

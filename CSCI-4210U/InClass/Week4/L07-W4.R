@@ -28,7 +28,7 @@ library(ggplot2) # Loads the 'mpg' dataset
 # 𝑦= b + a.𝑥
 mpg
 m_mpg <- lm(cty ~ displ, data = mpg)
-
+m_mpg
 
 # [Slide 6] Visualize the relationship
 # We plot the data points and overlay the "line of best fit".

@@ -1,0 +1,353 @@
+---
+title: 'L16: R Markdown & R Notebooks'
+author: "Your Name"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+  pdf_document:
+    toc: true
+---
+
+<!-- ============================================================
+     INSTRUCTOR NOTE:
+     This file IS the lecture — it demonstrates every concept by
+     using it live. Have students open this .Rmd in RStudio and
+     follow along. At the end, they press Knit (Ctrl+Shift+K) to
+     produce a finished HTML report from this very file.
+     ============================================================ -->
+
+```{r setup, include = FALSE}
+# ── SETUP CHUNK ───────────────────────────────────────────────────────────────
+# This is the standard first chunk in every R Markdown document.
+# include = FALSE means it runs silently — no code or output appears in the report.
+# knitr::opts_chunk$set() sets DEFAULT options for ALL chunks that follow.
+# Individual chunks can override these defaults.
+
+knitr::opts_chunk$set(
+  echo    = TRUE,    # Show code in the output by default
+  warning = FALSE,   # Suppress warning messages globally
+  message = FALSE    # Suppress package loading messages globally
+)
+
+library(ggplot2)   # Load packages here so they're available throughout
+```
+
+---
+
+## Literate Programming
+
+**Literate programming** is a paradigm introduced by Donald Knuth.
+
+It mixes computer code with a description of its function in natural language
+(such as English), along with macros, from which compilable source code can be
+generated.
+
+Since 2010, literate programming has grown rapidly with notebook interfaces.
+Modern examples include **Jupyter Notebook** and **R Notebooks**.
+
+---
+
+## What is an R Notebook?
+
+An **R Notebook** is a plain-text file with the extension `.Rmd`. When you open
+it in RStudio, it becomes a notebook interface for R.
+
+- They consist of **code chunks** that can be executed independently and
+  interactively, with output visible immediately beneath the input.
+- R Notebooks are written in **R Markdown**.
+- Notebooks can be **published by knitting** them into a variety of formats:
+  HTML, PDF, Word, dashboard, Shiny apps, and more.
+
+
+---
+
+## Elements of R Markdown
+
+R Markdown (and notebooks) consists of three main elements:
+
+1. **YAML metadata**
+2. **Text**
+3. **Code chunks**
+
+Let's start by exploring each one in this file now...
+
+---
+
+## 1. YAML Metadata
+
+We place the metadata at the top of the document between three pairs of dashes
+`---`. The syntax is **YAML** (YAML Ain't Markup Language).
+
+Look at the YAML block at the very top of this file:
+
+```yaml
+---
+title: "My first markdown"
+author: "Your name here"
+date: "2023-03-09"
+output: html_document
+---
+```
+
+Note — **YAML uses Python-style indentation** (spaces, not tabs).
+
+To see all available options for a format, use the R help page:
+
+```{r, eval = FALSE}
+?rmarkdown::html_document
+```
+
+Output formats are often accompanied by several format options:
+
+```yaml
+output:
+  html_document:
+    toc: true        # Add a table of contents
+    toc_depth: 2     # Include headings up to level 2
+    dev: 'svg'       # Use SVG graphics device
+```
+
+---
+
+## 2. Text — Markdown Syntax
+
+The body of the document follows the metadata. The syntax for text is Markdown.
+
+### Inline formatting
+
+| Markdown              | Output                  |
+|-----------------------|-------------------------|
+| `*italics*`           | *italics*               |
+| `**bold**`            | **bold**                |
+| `sub~script~`         | sub~script~             |
+| `super^script^`       | super^script^           |
+| `` `code` ``          | `code`                  |
+| `[text](link)`        | [text](https://example.com) |
+| `![](path/image.png)` | *(embeds an image)*     |
+| `text^[footnote]`     | text^[adds a page footnote] |
+
+Complete list: <https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf>
+
+### Block-level elements
+
+| Markdown                   | Output                        |
+|----------------------------|-------------------------------|
+| `# Header`                 | Level 1 heading (largest)     |
+| `## Header`                | Level 2 heading               |
+| `### Header`               | Level 3 heading               |
+| `- item` / `- item`        | Unordered bullet list         |
+| `1. item` / `2. item`      | Ordered numbered list         |
+
+**Blockquote** — prefix lines with `>`:
+
+> "Wise men talk because they have something to say; fools, because they have
+> to say something"
+>
+> Plato
+
+**Plain code block** — wrap text in triple backticks (no `{r}`) to display it
+as formatted code without executing it:
+
+```
+this is some R code dim(d)
+```
+
+---
+
+## 3. Code Chunks
+
+
+You can insert a new R code chunk with **Cmd+Option+I** (Mac) or **Ctrl+Alt+I**
+(Windows/Linux).
+
+You can do many things in a code chunk: produce **text output**, **tables**, or
+**graphics**.
+
+You have control over these outputs with **chunk options**, provided between
+` ```{r ` and `}`. For example, the following chunk hides text output:
+
+```{r, eval = FALSE}
+# Chunk options go in the header line, after the chunk label:
+# ```{r chunk-label, results='hide'}
+```
+
+**Chunk labels** are mainly used in filenames of plots and cache.
+They can also be used to indicate chunk role.
+
+Here is a live example — run this chunk now with **Ctrl+Shift+Enter**:
+
+```{r first-chunk}
+# A basic computation — result appears below
+mean(mpg$hwy)
+```
+
+```{r first-plot}
+# A plot — appears inline below this chunk when you run it
+ggplot(mpg, aes(x = displ, y = hwy, colour = class)) +
+  geom_point(size = 2) +
+  labs(title  = "Engine Displacement vs Highway MPG",
+       x      = "Displacement (L)",
+       y      = "Highway MPG",
+       colour = "Car Class") +
+  theme_bw()
+```
+
+**Shortcuts:**
+
+| Action           | Windows / Linux    | Mac              |
+|------------------|--------------------|------------------|
+| Insert chunk     | `Ctrl+Alt+I`       | `Cmd+Option+I`   |
+| Run current chunk | `Ctrl+Shift+Enter` | `Cmd+Shift+Enter`|
+| Knit document    | `Ctrl+Shift+K`     | `Cmd+Shift+K`    |
+
+---
+
+## Chunk Options
+
+### `echo` — show the code or not?
+
+`echo = FALSE` runs the code and shows only the **output** — the code itself
+is hidden. Useful for clean reports where readers only care about results.
+
+```{r echo-demo, echo = FALSE}
+# Reader sees only this output, not the code
+summary(mpg[, c("displ", "hwy", "cty")])
+```
+
+### `include` — run silently, show nothing
+
+`include = FALSE` runs the code but hides **everything** — no code, no output,
+no messages. This is what the setup chunk at the top uses.
+
+```{r silent-calc, include = FALSE}
+# This runs and stores objects, but nothing appears in the document
+n_cars   <- nrow(mpg)
+mean_hwy <- round(mean(mpg$hwy), 1)
+max_hwy  <- max(mpg$hwy)
+```
+
+The values computed above (`n_cars`, `mean_hwy`, `max_hwy`) are now available
+for use in inline R code later in this document.
+
+### `fig.width` and `fig.height`
+
+Control the plot size **in inches**. Default is `fig.width = 7, fig.height = 5`.
+
+```{r wide-plot, fig.width = 10, fig.height = 3}
+# A wide, short figure — note the chunk header: fig.width=10, fig.height=3
+ggplot(mpg, aes(x = manufacturer, y = hwy)) +
+  geom_col(fill = "steelblue") +
+  labs(title = "Highway MPG by Manufacturer", x = NULL, y = "Highway MPG") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+### `fig.cap` — add a caption to figures
+
+`fig.cap = "..."` adds a caption below graphical output:
+
+```{r caption-demo, fig.cap = "Figure 1. Petal length vs petal width, coloured by species.", fig.width = 6, fig.height = 4}
+ggplot(iris, aes(x = Petal.Length, y = Petal.Width, colour = Species)) +
+  geom_point(size = 2) +
+  labs(x = "Petal Length (cm)", y = "Petal Width (cm)") +
+  theme_bw()
+```
+
+### `warning`, `message`, and `error` — suppress R noise
+
+Whether to show warnings, messages, and errors in the output document.
+
+- `warning = FALSE` suppresses warning messages.
+- `message = FALSE` suppresses informational messages (e.g. from `library()`).
+- Both are set globally in the setup chunk at the top of this file.
+
+### `cache` — skip re-running expensive chunks
+
+`cache = TRUE` saves the chunk's result on first run. On subsequent knits, the
+chunk is **skipped** and the saved result is reused — saving time for slow
+computations.
+
+```{r, eval = FALSE}
+# Example: a slow computation you don't want to re-run every time
+# ```{r slow-model, cache = TRUE}
+# big_model <- lm(hwy ~ ., data = mpg)
+# ```
+```
+
+Many more options at: <https://yihui.org/knitr/options/#chunk-options>
+
+---
+
+## Global Chunk Options
+
+If a certain option needs to be frequently set in multiple chunks, set it
+**globally** in the first code chunk of your document:
+
+```{r global-opts-demo, eval = FALSE}
+# Place this in your setup chunk:
+knitr::opts_chunk$set(fig.width = 8, collapse = TRUE)
+```
+
+Individual chunks can still **override** a global default by specifying the
+option locally in their own header.
+
+Look at the setup chunk at the top of this file — it sets `echo = TRUE`,
+`warning = FALSE`, and `message = FALSE` for the whole document.
+
+
+---
+
+## Coding Challenge 
+
+Work through these steps in RStudio:
+
+1. **Create a new R Markdown document** that outputs to HTML
+   (`File > New File > R Markdown...`, choose HTML).
+2. **Add an introduction** that describes the `iris` dataset — what it
+   contains, how many rows, what the variables are.
+3. **Create a scatterplot** of petal length vs petal width, coloured by species.
+4. **Add a figure caption** using the `fig.cap` chunk option.
+
+---
+
+## R Notebooks
+
+An **R Notebook** is an R Markdown document with chunks that can be executed
+independently and interactively, with output visible immediately beneath the input.
+
+- Any R Markdown document can be used as a notebook, and all R Notebooks can be
+  rendered to other R Markdown document types.
+- A notebook can therefore be thought of as a **special execution mode** for
+  R Markdown documents.
+- Notebooks are a good choice **while authoring** the document and iterating
+  on code.
+
+### Creating a notebook
+
+You can create a new notebook from the menu:
+**File > New File > R Notebook**.
+
+You can also take an existing R Markdown doc and set the output to
+`html_notebook` in the YAML metadata:
+
+```yaml
+---
+title: "My Notebook"
+output: html_notebook
+---
+```
+
+### Use code chunks effectively
+
+As a chunk's output appears beneath the chunk, it is helpful to **split chunks
+that produce multiple outputs** into two or more chunks which each produce only
+one output.
+
+To do this, select the code to split, then use the new chunk keyboard shortcut
+(**Cmd+Option+I**, or **Ctrl+Alt+I**).
+
+---
+
+
+*End of L16 tutorial. Knit this file to see the finished report.*

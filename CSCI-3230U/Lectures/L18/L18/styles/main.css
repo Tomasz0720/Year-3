@@ -1,0 +1,28 @@
+body {
+    background-color: floralwhite;
+    max-width: 960px;
+    margin: 20px auto;
+}
+
+p,
+h3,
+ul {
+    margin: 0;
+    padding: 0;
+}
+
+li {
+    list-style-type: none;
+    background-color: white;
+    margin: 20px;
+    padding: 10px 20px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around
+}
+
+li.sale {
+    background-color: coral;
+    color: white;
+}

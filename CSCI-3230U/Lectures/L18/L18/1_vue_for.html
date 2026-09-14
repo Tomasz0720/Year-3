@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="src/1_app.js" defer></script>
+    <title>1 - Repetition with lists</title>
+</head>
+
+<body>
+    <h2>My first Vue app</h2>
+
+    <div id="app">
+        <div v-if="showCard">
+            <ul>
+                <li v-for="card in cards">
+                    <h3>{{ card.model }}</h3>
+                    <p>Price: <em>{{ card.price }}</em>, CUDA Cores: <em></em>{{ card.cores }}</em></p>
+                </li>
+            </ul>
+        </div>
+        <!-- Notice how the button contents update -->
+        <button @click="toggleCard">
+            <span v-show="showCard">Hide cards</span>
+            <span v-show="!showCard">Show cards</span>
+            <!-- <span v-if="!showCard">Show card</span> -->
+        </button>
+    </div>
+</body>
+
+</html>
