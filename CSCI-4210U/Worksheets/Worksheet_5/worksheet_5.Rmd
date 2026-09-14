@@ -1,0 +1,95 @@
+---
+title: "Titanic Survival"
+output:
+  html_document:
+    df_print: paged
+  pdf_document: default
+---
+
+```{r}
+# Part 1.
+# 1. Install the Package 'car.'
+
+install.packages('car')
+```
+
+```{r}
+library(tidyverse)
+library(scales)
+library(RColorBrewer)
+library(car)
+```
+
+```{r}
+# 2-5
+# Load the data ‘TitanicSurvival’. Convert to a tibble.
+# Remove rows with NA in passengerClass or survived.
+# Summarise the data by counting the numbers of people in passengerClass for each survived.
+
+data("TitanicSurvival")
+
+d <- TitanicSurvival |> 
+  as_tibble() |>
+  filter(!is.na(passengerClass), !is.na(survived))
+
+df_q1_sum <- d |>
+  count(passengerClass, survived)
+
+df_q1_sum
+
+```
+
+```{r}
+# 6-9
+# Create a stacked bar chart. Fill the bars with the palette ‘Set2’. Apply theme minimal.
+# Convert the bars to proportions.
+# Format the y‐axis as percent.
+# Label axes and add a descriptive title.
+
+ggplot(data = df_q1_sum, aes(x = passengerClass, y = n, fill = survived)) +
+  geom_col(position = "fill") +
+  scale_fill_brewer(palette = "Set2", name = "Survived?") +
+  scale_y_continuous(labels = scales::percent) +
+  labs(
+    x = "Passenger Clas",
+    y = "Proportion",
+    title = "Survival Proportions by Passenger Class"
+  ) +
+  theme_minimal()
+
+```
+
+```{r}
+# Part 2.
+# 1. Summarise the total counts for each passengerClass only.
+
+df_q2_sum <- TitanicSurvival |> 
+  as_tibble() |>
+  filter(!is.na(passengerClass)) |>
+  count(passengerClass)
+
+df_q2_sum
+```
+
+```{r}
+# 2-4
+# Make a pie chart that shows the proportions of passengerClass. Apply 'Purples' palette. Remove axis labels. Reverse the      ordering of the pie chart.
+# Apply a minimal theme. Remove axis text, axis ticks, and the panel grid lines.
+
+ggplot(df_q2_sum, aes(x = "", y = n, fill = passengerClass)) +
+  geom_bar(stat = "identity", width = 1) +
+  coord_polar(theta = "y") +
+  scale_y_reverse() +
+  scale_fill_brewer(palette = "Purples") +
+  labs(
+    x = NULL,
+    y = NULL,
+    title = "Distribution of Passengers by Class") +
+  theme_minimal() +
+  theme(
+    axis.text = element_blank(),
+    axis.ticks = element_blank(),
+    panel.grid = element_blank()
+  )
+
+```
